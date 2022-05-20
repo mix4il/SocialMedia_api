@@ -6,6 +6,7 @@ import morgan from 'morgan';
 import {userRoute} from "./routes/user.js";
 import {authRoute} from "./routes/auth.js";
 import {trainingRoute} from "./routes/training.js";
+import cors from 'cors'
 
 
 const app = express();
@@ -29,6 +30,7 @@ mongoose.connect(process.env.MONGO_URL,
 app.use(express.json());
 app.use(helmet());
 app.use(morgan("common"));
+app.use(cors());
 
 //routers
 app.use('/users', userRoute);
