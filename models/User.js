@@ -14,6 +14,7 @@ const userSchema = new mongoose.Schema({
     },
     img:{
         type:String,
+        default: '',
     },
     rating:{
         type: Number,

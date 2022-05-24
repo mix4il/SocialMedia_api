@@ -19,7 +19,7 @@ userRoute.get('/', async (req, res) =>{
 userRoute.get('/:id', async (req, res) =>{
     try {
         const user = userModel.findById(req.params.id, (err, doc)=>{
-            const {password, ...other} = doc.toJSON();
+            const {password, __v, ...other} = doc.toJSON();
             res.status(200).json(other);
         });
     } catch (e) {
@@ -50,7 +50,7 @@ userRoute.put('/:id', async (req, res) =>{
             const users = await userModel.findOneAndUpdate({ _id: req.params.id}, {
                 $set: req.body
             });
-            res.status(200).send("Данные о пользователе успешно обнолвены...");
+            res.status(200).send("Данные о пользователе успешно обновлены...");
         }
     } catch (e) {
         res.status(400).send({error: e.message});
@@ -105,6 +105,22 @@ userRoute.get('/:id/trainings', async (req, res) =>{
         res.status(400).send({error: e.message});
     }
 });
+
+userRoute.get('/:id/trainingsCreator', async (req, res) =>{
+    try {
+        const user = await userModel.findById(req.params.id);
+        const trainings = await Promise.all(
+            user?.trainings.map((trainId) => {
+                return trainingModel.findById(trainId);
+            })
+        )
+        res.status(200).json(trainings);
+    } catch (e) {
+        res.status(400).send({error: e.message});
+    }
+});
+
+
 
 
 

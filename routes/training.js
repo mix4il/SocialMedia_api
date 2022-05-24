@@ -26,6 +26,18 @@ trainingRoute.get('/:id', async (req, res) =>{
     }
 )
 
+//Получить тренировки которые создал пользователь
+trainingRoute.get('/:id/userCreator', async (req, res) =>{
+        try {
+            const training = await trainingModel.find({idCreator: req.params.id});
+            res.status(200).json(training);
+        } catch (e) {
+            res.status(500).json({error: e.message});
+        }
+    }
+);
+
+
 trainingRoute.post('/', async (req, res) =>{
         try {
             const newTraining = new trainingModel({
@@ -37,7 +49,8 @@ trainingRoute.post('/', async (req, res) =>{
             res.status(500).json({error: e.message});
         }
     }
-)
+);
+
 
 trainingRoute.delete('/:id', async (req, res) =>{
         try {
@@ -59,7 +72,7 @@ trainingRoute.post('/:id/entry', async (req, res) =>{
             if(!training?.members.includes(req.body.userId)){
                 await user.updateOne({$push : {trainings: req.params.id}});
                 await training.updateOne({$push : {members : req.body.userId}})
-                res.status(500).send("Успешно записались!");
+                res.status(200).send("Успешно записались!");
             }
             res.status(500).json({error: "Уже записаны на эту тренировку"});
         } catch (e) {
@@ -75,7 +88,7 @@ trainingRoute.post('/:id/cancelEntry', async (req, res) =>{
             if(training?.members.includes(req.body.userId)){
                 await user.updateOne({$pull : {trainings: req.params.id}});
                 await training.updateOne({$pull : {members : req.body.userId}});
-                res.status(500).send("Запись отменена.");
+                res.status(200).send("Запись отменена.");
             }
             res.status(500).json({error: "Вы не записаны на эту тренировку"});
         } catch (e) {
@@ -83,6 +96,13 @@ trainingRoute.post('/:id/cancelEntry', async (req, res) =>{
         }
     }
 )
+
+
+
+
+
+
+
 
 
 
