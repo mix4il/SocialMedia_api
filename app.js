@@ -7,6 +7,8 @@ import {userRoute} from "./routes/user.js";
 import {authRoute} from "./routes/auth.js";
 import {trainingRoute} from "./routes/training.js";
 import cors from 'cors'
+import {conversationRouter} from "./routes/conversation.js";
+import {messageRouter} from "./routes/message.js";
 
 
 const app = express();
@@ -36,6 +38,8 @@ app.use(cors());
 app.use('/users', userRoute);
 app.use('/auth', authRoute);
 app.use('/training', trainingRoute);
+app.use('/conversation', conversationRouter);
+app.use('/message', messageRouter);
 
 
 app.listen(PORT, () =>{
